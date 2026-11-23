@@ -240,3 +240,8 @@ Thumbs.db
 *.pt
 *.pth
 *.onnx
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/

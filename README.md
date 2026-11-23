@@ -49,3 +49,9 @@ documents may be used.
 
 Credentials, API keys, and private environment
 configuration must not be committed to Git.
+
+
+## Development Setup
+
+For installation and configuration instructions,
+see [Environment Setup Guide](docs/ENVIRONMENT_SETUP.md).
