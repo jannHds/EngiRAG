@@ -228,3 +228,35 @@ Lujain: Pending review.
 Asma: Pending review.
 
 Overall status: Implementation and contract tests updated; final review and isolated PostgreSQL migration validation remain pending.
+
+
+### Local PostgreSQL Migration Validation
+
+Environment:
+- PostgreSQL: 17.12
+- Database: engirag_test
+- Database User: engirag_test_user
+- Django Settings: config.settings_pgtest
+- Connection: localhost:5432
+
+Results:
+- Django successfully connected to the isolated PostgreSQL database.
+- Django migrations were executed against the local test database.
+- accounts.0001_initial was confirmed as applied.
+- The accounts_user table was confirmed to exist in PostgreSQL.
+- The shared Supabase database was not used for this migration test.
+
+Evidence:
+
+    accounts
+     [X] 0001_initial
+
+    SELECT to_regclass('public.accounts_user');
+
+    Result: accounts_user
+
+Conclusion:
+The initial Custom User Model migration was successfully
+validated on PostgreSQL 17.12 in an isolated local environment.
+
+Status: PASSED
