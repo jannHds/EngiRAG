@@ -6,8 +6,8 @@
 - Project: EngiRAG
 - Sprint: Sprint 1
 - Task ID: S1-03
-- Owner: Student 1
-- Reviewer: Student 5
+- Owner: Jana
+- Reviewer: Asma
 - Status: In Progress — Pending Peer Review
 
 ## 1. Objective
@@ -102,3 +102,129 @@ Verified:
 ## 9. Review Status
 
 Pending cross-team review and approval.
+---
+
+## S1-03 — Team Review and Contract Validation Update
+
+### 1. Team Review Summary
+
+Alzahraa reviewed the document processing and evidence requirements. Leen reviewed the indexing and retrieval requirements.
+
+Their feedback was incorporated into the preliminary logical ERD and Pydantic contracts.
+
+#### Alzahraa — Document Processing
+
+The following design decisions were incorporated:
+
+- Preserve engineering relationships between equipment, parameters, values, and units.
+- Support structured engineering facts alongside original evidence text.
+- Retain source locations, including pages, sections, tables, and cell references.
+- Distinguish DocumentVersion from ContentRevision.
+- Define validation states: PENDING, NEEDS_REVIEW, APPROVED, and REJECTED.
+- Record extraction methods, optional confidence scores, and extraction issues.
+
+#### Leen — Indexing and Retrieval
+
+The following design decisions were incorporated:
+
+- Use a many-to-many logical relationship between EvidenceUnit and IndexedChunk through ChunkEvidence.
+- Keep Evidence IDs independent of Chunk IDs.
+- Introduce EmbeddingProfile to describe embedding configurations.
+- Extend IndexGeneration to describe indexing configurations.
+- Preserve document version, content revision, and access scope information.
+- Extend retrieval contracts with language, retrieval mode, index generation, and retrieval profile information.
+- Separate dense, lexical, and fusion scores.
+- Define a preliminary RetrievedChunk contract.
+- Require reindexing and active-index eligibility updates when approved content changes.
+
+These decisions define the preliminary interface and logical design. They do not represent complete physical database or retrieval implementation.
+
+### 2. Updated Contract Validation
+
+The following files were updated:
+
+- backend/contracts/schemas.py
+- tests/test_contracts.py
+- docs/architecture/initial_erd.md
+
+Validation coverage includes:
+
+- Private and shared document reference validation.
+- Required document ownership and conversation identifiers.
+- Engineering facts with parameters, values, and units.
+- Source location validation.
+- Approved evidence source-location requirements.
+- Extraction confidence boundaries.
+- Validation status restrictions.
+- Rejection of unapproved evidence in retrieval results.
+- Rejection of mixed document versions and content revisions within retrieved chunks.
+- Retrieval request configuration validation.
+
+### 3. Automated Test Results
+
+Environment:
+- Python: 3.12.10
+- Django: 5.2.19
+- pytest: 9.2.0
+
+Command:
+
+    python -m pytest -v
+
+Result:
+
+    20 passed in 0.32s
+
+Django validation command:
+
+    python backend\manage.py check
+
+Result:
+
+    System check identified no issues (0 silenced).
+
+### 4. Database Feasibility Status
+
+Previously verified:
+
+- Django connectivity to Supabase PostgreSQL.
+- PostgreSQL/pgvector extension availability.
+- Basic vector similarity functionality.
+- Local SQLite migration testing for the Custom User Model.
+
+Important limitations:
+
+- Django migrations have not been applied to the shared Supabase database.
+- The expanded logical ERD has not been implemented as Django models.
+- The many-to-many ChunkEvidence relationship is a logical design decision, not a tested database relationship.
+- Isolated PostgreSQL migration testing remains pending.
+
+### 5. Security and Integration Limitations
+
+Pydantic validation does not establish user authorization.
+
+The following requirements still need backend implementation and integration testing:
+
+- Conversation ownership enforcement.
+- Cross-user and cross-conversation access isolation.
+- Private/shared retrieval filtering.
+- Administrative publication permissions.
+- Index activation and revision eligibility.
+- Citation authorization and verification.
+
+### 6. Outstanding Reviews
+
+- Student 4: Citation structure and answering contract review.
+- Student 5: Custom User Model, ownership rules, authorization boundaries, and final pull request review.
+
+### 7. Review Status
+
+Alzahraa: Feedback received and incorporated into the preliminary design.
+
+Leen: Feedback received and incorporated into the preliminary design.
+
+Lujain: Pending review.
+
+Asma: Pending review.
+
+Overall status: Implementation and contract tests updated; final review and isolated PostgreSQL migration validation remain pending.
